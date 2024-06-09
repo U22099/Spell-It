@@ -305,6 +305,6 @@ document.getElementById('hide').addEventListener('click', (e) => {
     } else if(e.target.innerText === 'Show'){
         document.getElementById('def-container').style.visibility = 'visible';
         e.target.innerText = 'Hide';
-    }s
+    }
 })
 init();
