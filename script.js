@@ -193,6 +193,24 @@ document.getElementById('start').addEventListener('click', () => {
             break;
     }
 });
+document.getElementById('send').addEventListener('keyup', (e) => {
+    if(e.key === 'Enter'){
+        chance++
+        if(chance <= 3 && !correct){
+            assessInput();
+            if(correct){
+                correct = false;
+                displayAns();
+                callWord();
+                chance = 0;
+            }
+        } else {
+            displayAns();
+            callWord();
+            chance = 0
+        }
+    }
+});
 document.getElementById('send').addEventListener('click', () => {
     chance++
     if(chance <= 3 && !correct){
