@@ -8,6 +8,7 @@ let no = 0;
 let chance = 0;
 let letterNo = 1;
 let correct = false;
+let askedWord = '';
 const WORDS = document.getElementById('words').innerText.split(',');
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(',');
 async function init(){
@@ -89,6 +90,7 @@ function generateNewWord(){
 }
 function callWord(){
     const {text, org} = generateNewWord();
+    askedWord = text;
     if(text){
         currentTxt = 'Spell the word... '+text+' ...Origin of '+org;
     } else {
@@ -139,34 +141,28 @@ function resetTexts(){
 }
 function saveData(){
     const json = JSON.stringify({
-        word: word,
-        origin: origin,
         asked: asked,
-        no: no,
         currentTxt: currentTxt,
-        correct: correct,
-        chance: chance,
         score: score,
         ans: ans
     });
 
     localStorage.setItem(alpha[letterNo - 1], json);
+    alert('History Saved');
 }
 function getData(){
     const response = localStorage.getItem(alpha[letterNo - 1]);
 
+    console.log(asked);
     const data = JSON.parse(response);
 
-    word = data.word;
-    origin = data.origin;
     asked = data.asked;
-    no = data.no;
     currentTxt = data.currentTxt;
-    correct = data.correct;
-    chance = data.chance;
     score = data.score;
     ans = data.ans;
     document.getElementById('save').innerText = 'Save';
+    alert('History Restore');
+    console.log(asked);
 }
 function clearData(){
     localStorage.removeItem(alpha[letterNo - 1]);
@@ -181,6 +177,45 @@ function clearData(){
     ans = '';
     resetTexts();
     document.getElementById('save').innerText = 'Save';
+    alert('History Cleared');
+}
+async function getDefinition(){
+    const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${askedWord}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        console.log(data)
+        let text;
+        if(!data[0].meanings){
+            text = data.title;
+        } else {
+            const def2 = 'Null'
+            if(data[0].meanings[1]){
+                def2 = data[0].meanings[1].definitions[0].definition;
+            } else if(data[0].meanings[0].definitions[1]){
+                def2 = data[0].meanings[0].definitions[1].definition;
+            }
+            console.log(data[0].meanings)
+            const definition = `${data[0].meanings[0].definitions[0].definition} or ${def2}`;
+            const origin = data[0].origin;
+            const example = data[0].meanings[0].definitions[0].example;
+            console.log(data[0].meanings[0].definitions[0].definition)
+            console.log(def2)
+            text = `${definition}...\nOrigin: ${origin}...\nExample: ${example}`;
+        }
+        return text
+    } catch (error) {
+        alert(error)
+    }
+}
+async function showDefinition(){
+    const defoutput = document.getElementById('defOutput');
+    const text = await getDefinition();
+
+    speak(text);
+    defoutput.innerText = text;
 }
 document.getElementById('start').addEventListener('click', () => {
     switch(document.getElementById('start').innerText){
@@ -193,8 +228,8 @@ document.getElementById('start').addEventListener('click', () => {
             break;
     }
 });
-document.getElementById('send').addEventListener('keyup', (e) => {
-    if(e.key === 'Enter'){
+document.getElementById('input').addEventListener('keyup', (e) => {
+    if(e.keyCode === 13){
         chance++
         if(chance <= 3 && !correct){
             assessInput();
@@ -249,8 +284,8 @@ document.getElementById('backward').addEventListener('click', () => {
     init();
     resetTexts();
 });
-document.getElementById('save').addEventListener('click', () => {
-    if(localStorage.hasOwnProperty(alpha[letterNo - 1])){
+document.getElementById('save').addEventListener('click', (e) => {
+    if(localStorage.hasOwnProperty(alpha[letterNo - 1])&&e.target.innerText === 'Continue'){
         document.getElementById('save').innerText = 'Save';
         document.getElementById('start').innerText = 'Start';
         getData();
@@ -261,6 +296,9 @@ document.getElementById('save').addEventListener('click', () => {
 document.getElementById('reset').addEventListener('click', () => {
     clearData();
     init();
+});
+document.getElementById('def').addEventListener('click', () => {
+    showDefinition();
 });
 
 init();
