@@ -209,9 +209,10 @@ async function getDefinition(){
 }
 async function showDefinition(){
     const defoutput = document.getElementById('defOutput');
-    const text = await getDefinition();
+    let text = await getDefinition();
 
     speak(text);
+    text = text.replace(new RegExp(askedWord, 'g'), '*.*');
     defoutput.innerText = text;
 }
 document.getElementById('start').addEventListener('click', () => {
@@ -297,5 +298,13 @@ document.getElementById('reset').addEventListener('click', () => {
 document.getElementById('def').addEventListener('click', () => {
     showDefinition();
 });
-
+document.getElementById('hide').addEventListener('click', () => {
+    if(e.target.innerText === 'Hide'){
+        document.getElementById('def-container').style.visibility = 'hidden';
+        e.target.innerText = 'Show';
+    } else if(e.target.innerText === 'Show'){
+        document.getElementById('def-container').style.visibility = 'visible';
+        e.target.innerText = 'Hide';
+    }
+})
 init();
