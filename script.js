@@ -108,6 +108,8 @@ function displayScore(){
 }
 function displayAns(){
     const output = document.getElementById('output');
+    const input = document.getElementById('input');
+    input.innerText = '';
     output.innerText = ans.toUpperCase();
 }
 document.getElementById('start').addEventListener('click', () => {
