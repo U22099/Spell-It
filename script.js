@@ -11,12 +11,11 @@ let correct = false;
 const WORDS = document.getElementById('words').innerText.split(',');
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(',');
 async function init(){
-    if(localStorage.hasOwnProperty(alpha[letterNo])){
+    if(localStorage.hasOwnProperty(alpha[letterNo - 1])){
         document.getElementById('save').innerText = 'Continue';
     }
     try {
         const data = WORDS[letterNo - 1];
-        console.log(data)
         const wordAll = data.split(' ');
         for (let i = 0; i < wordAll.length; i++) {
             if(i === 0 || isEven(i)){
@@ -25,7 +24,6 @@ async function init(){
                 origin.push(wordAll[i]);
             }
         }
-        console.log(word)
         if(word.includes(' ') || word.includes('')){
             console.log('Error at'+word[word.indexOf(' ')]+' before'+word[word.indexOf(' ')]-1);
         }
