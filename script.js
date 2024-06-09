@@ -298,13 +298,13 @@ document.getElementById('reset').addEventListener('click', () => {
 document.getElementById('def').addEventListener('click', () => {
     showDefinition();
 });
-document.getElementById('hide').addEventListener('click', () => {
+document.getElementById('hide').addEventListener('click', (e) => {
     if(e.target.innerText === 'Hide'){
         document.getElementById('def-container').style.visibility = 'hidden';
         e.target.innerText = 'Show';
     } else if(e.target.innerText === 'Show'){
         document.getElementById('def-container').style.visibility = 'visible';
         e.target.innerText = 'Hide';
-    }
+    }s
 })
 init();
