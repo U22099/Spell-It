@@ -94,11 +94,13 @@ function assessInput(){
         speak('Correct');
         correct = true
         input.style.border = '2px solid goldenrod';
+        input.innerText = '';
     } else {
         score -= 10;
         speak('Wrong');
         correct = false;
         input.style.border = '2px solid red';
+        input.innerText = '';
     }
     displayScore()
 }
