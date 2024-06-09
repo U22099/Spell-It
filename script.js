@@ -37,7 +37,7 @@ function speak(str){
     const utterance = new SpeechSynthesisUtterance();
 
     utterance.text = str
-    utterance.voice = speech.getVoices().filter(voice => voice.name === "Melina" || "melina")[0];
+    utterance.voice = speech.getVoices().filter(voice => voice.lang === "en-GB" && voice.gender === "female" && voice.name.includes("female"))[0];
     utterance.rate = 0.7;
 
     speech.speak(utterance);
