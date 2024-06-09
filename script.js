@@ -38,7 +38,7 @@ function speak(str){
 
     utterance.text = str
     utterance.voice = speech.getVoices().filter(voice => voice.lang === "en-GB" && voice.gender === "female")[0];
-    utterance.rate = 0.8;
+    utterance.rate = 0.7;
 
     speech.speak(utterance);
 };
@@ -74,16 +74,16 @@ function generateNewWord(){
 }
 function callWord(){
     const {text, org} = generateNewWord();
-    currentTxt = 'Spell the word ...'+text+' Origin of '+org;
+    currentTxt = 'Spell the word... '+text+' ...Origin of '+org;
     speak(currentTxt);
+    no = 0;
 }
 function repeat(){
-    if(no <= 3){
+    if(no < 3){
         speak(currentTxt);
         no++
     } else {
         speak('Max Repeat Reached');
-        no = 0;
     }
 }
 function assessInput(){
@@ -122,7 +122,7 @@ document.getElementById('start').addEventListener('click', () => {
     }
 });
 document.getElementById('send').addEventListener('click', () => {
-    if(chance <= 3 && !correct){
+    if(chance < 3 && !correct){
         assessInput();
         if(correct){
             correct = false;
