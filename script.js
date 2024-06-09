@@ -37,7 +37,8 @@ function speak(str){
     const utterance = new SpeechSynthesisUtterance();
 
     utterance.text = str
-    utterance.voice = speechSynthesis.getVoices().filter(voice => voice.lang === 'en-GB' && voice.gender ==='female')[0];
+    utterance.voice = speech.getVoices().filter(voice => voice.lang === "en-GB" && voice.gender === "female")[0];
+    utterance.rate = 0.8;
 
     speech.speak(utterance);
 };
@@ -73,7 +74,7 @@ function generateNewWord(){
 }
 function callWord(){
     const {text, org} = generateNewWord();
-    currentTxt = 'Spell the word '+text+' Origin of '+org;
+    currentTxt = 'Spell the word ...'+text+' Origin of '+org;
     speak(currentTxt);
 }
 function repeat(){
@@ -82,6 +83,7 @@ function repeat(){
         no++
     } else {
         speak('Max Repeat Reached');
+        no = 0;
     }
 }
 function assessInput(){
