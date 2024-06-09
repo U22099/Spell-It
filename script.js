@@ -188,7 +188,7 @@ async function getDefinition(){
 
         console.log(data)
         let text;
-        if(!data[0].meanings){
+        if(!data[0]){
             text = data.title;
         } else {
             let def2 = 'Null'
