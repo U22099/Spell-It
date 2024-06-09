@@ -36,7 +36,7 @@ function speak(str){
     const speech = window.speechSynthesis || speechSynthesis;
     const utterance = new SpeechSynthesisUtterance();
 
-    utterance.txt = str
+    utterance.text = str
     utterance.voice = speechSynthesis.getVoices().filter(voice => voice.lang === 'en-GB' && voice.gender ==='female')[0];
 
     speech.speak(utterance);
