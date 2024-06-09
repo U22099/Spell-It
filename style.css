@@ -1,0 +1,97 @@
+body{
+    margin: 0px;
+    font-family: monospace;
+    color: white;
+    font-weight: 500;
+}
+p{
+    margin: 10px 0px;
+}
+.custom-bg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #131313;
+    border-radius: 5px;
+    font-size: 2em;
+    padding: 10px 20px;
+    box-shadow: none;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+    background: hsl(0, 100%, 0%);
+}
+.container > .content{
+    display: grid;
+    grid-template-rows: 1fr 5fr;
+    grid-gap: 10px;
+    padding: 10px;
+    height: 90%;
+}
+.container > .content > header > p{
+    color: goldenrod;
+}
+.container > .content > .main > .alphabets{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
+    padding: 10px;
+}
+.container > .content > .main > .alphabets > p:nth-child(2n-1){
+    cursor: pointer;
+    color: goldenrod;
+}
+.container > .content > .main > .ans > p{
+    color: goldenrod;
+}
+.container > .content > .main > .input{
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    grid-gap: 10px;
+}
+.container > .content > .main > .input > #input{
+    padding: 10px;
+    background: #131313;
+    color: white;
+    font-size: 1.2em;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+.container > .content > .main > .input > #input:focus{
+    outline: none;
+}
+.container > .content > .main > .input > button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: goldenrod;
+    color: black;
+    font-size: 1.5em;
+    font-weight: 500;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+.container > .content > .main > .btns{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
+    padding: 5px;
+    margin: 10px 0px;
+}
+.container > .content > .main > .btns > button{
+    background: goldenrod;
+    color: black;
+    font-size: .7em;
+    font-weight: 500;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
