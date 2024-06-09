@@ -191,18 +191,15 @@ async function getDefinition(){
         if(!data[0].meanings){
             text = data.title;
         } else {
-            const def2 = 'Null'
+            let def2 = 'Null'
             if(data[0].meanings[1]){
                 def2 = data[0].meanings[1].definitions[0].definition;
             } else if(data[0].meanings[0].definitions[1]){
                 def2 = data[0].meanings[0].definitions[1].definition;
             }
-            console.log(data[0].meanings)
             const definition = `${data[0].meanings[0].definitions[0].definition} or ${def2}`;
             const origin = data[0].origin;
             const example = data[0].meanings[0].definitions[0].example;
-            console.log(data[0].meanings[0].definitions[0].definition)
-            console.log(def2)
             text = `${definition}...\nOrigin: ${origin}...\nExample: ${example}`;
         }
         return text
