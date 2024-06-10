@@ -147,6 +147,7 @@ function resetTexts(){
     displayScore();
     document.getElementById('start').innerText = 'Start';
     document.getElementById('input').innerText = '';
+			document.getElementById('save').innerText = 'Continue';
     document.getElementById('alphabet').innerText = alpha[letterNo - 1];
 }
 function saveData(){
