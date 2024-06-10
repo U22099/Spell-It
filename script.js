@@ -121,6 +121,9 @@ function assessInput(){
         correct = true;
         input.style.border = '2px solid goldenrod';
         input.value = '';
+		  if(chance < 2){
+            correctlyAnswered.push(ans);
+        }
     } else {
         score -= 10;
         speak('Wrong');
@@ -231,7 +234,6 @@ async function showDefinition(){
 function missedWord(){
     word = asked;
     asked = correctlyAnswered;
-    correctlyAnswered = [];
     document.getElementById('start').innerText = 'Start';
     speech.cancel()
     speak('Press start to start the missed words')
@@ -258,11 +260,11 @@ document.getElementById('input').addEventListener('keyup', (e) => {
                 displayAns();
                 callWord();
                 chance = 0;
-            }
-        } else {
+           } else if(chance === 3 && !correct) {
             displayAns();
             callWord();
             chance = 0
+        		}
         }
     }
 });
@@ -276,13 +278,10 @@ document.getElementById('send').addEventListener('click', () => {
             displayAns();
             callWord();
             chance = 0;
-        } else if(chances = 3 && !correct) {
+        } else if(chance === 3 && !correct) {
             displayAns();
             callWord();
             chance = 0
-        }
-        if(correct && chances < 2){
-            correctlyAnswered.push(ans);
         }
     }
 });
@@ -293,6 +292,8 @@ document.getElementById('forward').addEventListener('click', () => {
         letterNo += 1;
     }
 
+	 speech.cancel();
+	 speak(alpha[letterNo - 1]);
     word = [];
     origin = [];
     asked = [];
@@ -301,12 +302,14 @@ document.getElementById('forward').addEventListener('click', () => {
     resetTexts();
 });
 document.getElementById('backward').addEventListener('click', () => {
-    if(letterNo <- 0){
+    if(letterNo <= 0){
         letterNo = 1;
     } else {
         letterNo -= 1;
     }
 
+	 speech.cancel();
+	 speak(alpha[letterNo - 1]);
     init();
     resetTexts();
 });
@@ -340,7 +343,7 @@ document.getElementById('missed').addEventListener('click', (e) => {
         missedWord();
     } else {
         speech.cancel();
-        speak('Please finish this letter before practiceing the missed word')
+        speak('Please finish this letter before practicing the missed word')
     }
 });
 init();

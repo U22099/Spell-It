@@ -26,7 +26,7 @@ p{
 }
 .container > .content{
     display: grid;
-    grid-template-rows: 1fr 5fr;
+    grid-template-rows: 1fr;
     grid-gap: 10px;
     padding: 10px;
     height: 90%;
@@ -95,8 +95,11 @@ p{
     border: none;
     cursor: pointer;
 }
-@media (max-width: 360px){
-    .container > .content > .main > .input{
-        grid-template: none;
-    }
+@media (max-width: 500px){
+    .container > .content > .main > .btns{
+		grid-template-columns: 1fr 1fr;
+	}
+	.container > .content > .main > .btns > button:last-child{
+		grid-column: span 2;
+	}
 }
