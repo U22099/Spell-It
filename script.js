@@ -28,8 +28,8 @@ async function init(){
                 origin.push(wordAll[i]);
             }
         }
-        if(word.includes(' ') || word.includes('')){
-            alert('Error at'+word[word.indexOf(' ')]+' before'+word[word.indexOf(' ')]-1);
+        if((word.includes(' ') || word.includes(''))&&word.length > 1){
+            alert('Error at '+word[word.indexOf('')]+' before '+word[word.indexOf('') - 1]);
         }
     } catch (error) {
         console.error(error);
@@ -309,13 +309,13 @@ document.getElementById('forward').addEventListener('click', () => {
     init()
 });
 document.getElementById('backward').addEventListener('click', () => {
-    if(letterNo <= 0){
-        letterNo = 1;
+    if(letterNo <= 1){
+        letterNo = 26;
     } else {
         letterNo -= 1;
     }
     speech.cancel();
-	 speak(alpha[letterNo - 1]);
+    speak(alpha[letterNo - 1]);
     resets();
     init();
 });

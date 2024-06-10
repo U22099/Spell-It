@@ -34,6 +34,10 @@ p{
 .container > .content > header > p{
     color: goldenrod;
 }
+.container > .content > .main{
+    max-width: 70vw;
+    min-width: 50vw;
+}
 .container > .content > .main > .alphabets{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -96,10 +100,13 @@ p{
     cursor: pointer;
 }
 @media (max-width: 500px){
+    .container > .content > .main{
+        max-width: 100vw;
+    }
     .container > .content > .main > .btns{
-		grid-template-columns: 1fr 1fr;
-	}
-	.container > .content > .main > .btns > button:last-child{
-		grid-column: span 2;
-	}
+	grid-template-columns: 1fr 1fr;
+    }
+    .container > .content > .main > .btns > button:last-child{
+	grid-column: span 2;
+    }
 }
