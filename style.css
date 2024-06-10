@@ -95,3 +95,8 @@ p{
     border: none;
     cursor: pointer;
 }
+@media (max-width: 360px){
+    .container > .content > .main > .input{
+        grid-template: none;
+    }
+}
