@@ -29,7 +29,7 @@ async function init(){
             }
         }
         if(word.includes(' ') || word.includes('')){
-            console.log('Error at'+word[word.indexOf(' ')]+' before'+word[word.indexOf(' ')]-1);
+            alert('Error at'+word[word.indexOf(' ')]+' before'+word[word.indexOf(' ')]-1);
         }
     } catch (error) {
         console.error(error);
@@ -141,12 +141,23 @@ function displayAns(){
     const output = document.getElementById('output');
     output.innerText = ans.toUpperCase();
 }
-function resetTexts(){
-    ans = '';
+function resets(){
+    word = [];
+    origin = [];
+    asked = [];
+    correctlyAnswered = [];
+    finished = false;
     score = 0;
+    currentTxt = '';
+    ans = '';
+    no = 0;
+    chance = 0;
+    askedWord = '';
+    correct = false;
     displayScore();
     document.getElementById('start').innerText = 'Start';
     document.getElementById('input').innerText = '';
+			document.getElementById('save').innerText = 'Save';
     document.getElementById('alphabet').innerText = alpha[letterNo - 1];
 }
 function saveData(){
@@ -190,7 +201,7 @@ function clearData(){
     chance = 0;
     score = 0;
     ans = '';
-    resetTexts();
+    resets();
     document.getElementById('save').innerText = 'Save';
     speech.cancel();
     speak('History Cleared');
@@ -294,12 +305,8 @@ document.getElementById('forward').addEventListener('click', () => {
 
 	 speech.cancel();
 	 speak(alpha[letterNo - 1]);
-    word = [];
-    origin = [];
-    asked = [];
-    correctlyAnswered = [];
-    init();
-    resetTexts();
+    resets();
+    init()
 });
 document.getElementById('backward').addEventListener('click', () => {
     if(letterNo <= 0){
@@ -307,11 +314,10 @@ document.getElementById('backward').addEventListener('click', () => {
     } else {
         letterNo -= 1;
     }
-
-	 speech.cancel();
+    speech.cancel();
 	 speak(alpha[letterNo - 1]);
+    resets();
     init();
-    resetTexts();
 });
 document.getElementById('save').addEventListener('click', (e) => {
     if(localStorage.hasOwnProperty(alpha[letterNo - 1])&&e.target.innerText === 'Continue'){
