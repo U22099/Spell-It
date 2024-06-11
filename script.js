@@ -12,7 +12,7 @@ let letterNo = 1;
 let correct = false;
 let askedWord = '';
 const WORDS = document.getElementById('words').innerText.split(',');
-const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(',');
+const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ALL".split(',');
 const speech = window.speechSynthesis || speechSynthesis;
 async function init(){
     if(localStorage.hasOwnProperty(alpha[letterNo - 1])){
@@ -31,6 +31,7 @@ async function init(){
         if((word.includes(' ') || word.includes(''))&&word.length > 1){
             alert('Error at '+word[word.indexOf('')]+' before '+word[word.indexOf('') - 1]);
         }
+        document.getElementById('max-score').innerText = `Max-Score: ${word.length*10}`;
     } catch (error) {
         console.error(error);
     }
@@ -135,7 +136,7 @@ function assessInput(){
 }
 function displayScore(){
     const scoreboard = document.getElementById('score');
-    scoreboard.innerText = score;
+    scoreboard.innerText = `Score: ${score}`;
 }
 function displayAns(){
     const output = document.getElementById('output');
@@ -297,7 +298,7 @@ document.getElementById('send').addEventListener('click', () => {
     }
 });
 document.getElementById('forward').addEventListener('click', () => {
-    if(letterNo >= 26){
+    if(letterNo >= 27){
         letterNo = 1;
     } else {
         letterNo += 1;
@@ -310,7 +311,7 @@ document.getElementById('forward').addEventListener('click', () => {
 });
 document.getElementById('backward').addEventListener('click', () => {
     if(letterNo <= 1){
-        letterNo = 26;
+        letterNo = 27;
     } else {
         letterNo -= 1;
     }
@@ -327,6 +328,11 @@ document.getElementById('save').addEventListener('click', (e) => {
     } else {
         saveData();
     }
+});
+document.getElementById('reveal').addEventListener('click', () => {
+    displayAns();
+    callWord();
+    chance = 0
 });
 document.getElementById('reset').addEventListener('click', () => {
     clearData();

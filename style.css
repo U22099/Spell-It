@@ -99,14 +99,20 @@ p{
     border: none;
     cursor: pointer;
 }
+.container > .content > .main > .frbtns > button:last-child{
+    grid-column: span 3;
+}
 @media (max-width: 500px){
     .container > .content > .main{
         max-width: 100vw;
     }
     .container > .content > .main > .btns{
-	grid-template-columns: 1fr 1fr;
+	    grid-template-columns: 1fr 1fr;
     }
-    .container > .content > .main > .btns > button:last-child{
-	grid-column: span 2;
+    .container > .content > .main > .frbtns > button:last-child{
+        grid-column: span 1;
+    }
+    .container > .content > .main > .lsbtns > button:last-child{
+	    grid-column: span 2;
     }
 }
