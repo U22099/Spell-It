@@ -1,3 +1,4 @@
+//Declaring variables
 let word = [];
 let origin = [];
 let asked = [];
@@ -14,7 +15,12 @@ let askedWord = '';
 const WORDS = document.getElementById('words').innerText.split(',');
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ALL".split(',');
 const speech = window.speechSynthesis || speechSynthesis;
-async function init(){
+
+//Defining needed functions
+
+//init Function 
+
+function init(){
     if(localStorage.hasOwnProperty(alpha[letterNo - 1])){
         document.getElementById('save').innerText = 'Continue';
     }
@@ -36,10 +42,15 @@ async function init(){
         console.error(error);
     }
 }
+
+//Utility function to check if a number is even
+
 function isEven(no){
     const result = no%2 === 0 ? true : false;
     return result;
 }
+
+//Utility Speak function 
 
 function speak(str){
     const utterance = new SpeechSynthesisUtterance();
@@ -50,10 +61,16 @@ function speak(str){
 
     speech.speak(utterance);
 };
+
+// Get random number with max-value (max)
+
 function getRandom(max){
     const no = Math.floor(Math.random() * max);
     return no;
 }
+
+//check if a word is available (hasnt been called)
+
 function available(){
     const arrayObj = {
         word: [],
@@ -70,6 +87,9 @@ function available(){
     }
     return arrayObj
 }
+
+//Generates a random word to ve called
+
 function generateNewWord(){
     const {word, origin} = available();
     const no = getRandom(word.length);
@@ -91,6 +111,9 @@ function generateNewWord(){
         }
     }
 }
+
+//Calls the randomly generated word
+
 function callWord(){
     const {text, org} = generateNewWord();
     askedWord = text;
@@ -103,6 +126,9 @@ function callWord(){
     speak(currentTxt);
     no = 0;
 }
+
+//Repeats the called word for only 3 times
+
 function repeat(){
     if(no < 3){
         speech.cancel();
@@ -113,6 +139,9 @@ function repeat(){
         speak('Max Repeat Reached');
     }
 }
+
+//Assesses users answer
+
 function assessInput(){
     const input = document.getElementById('input');
 
@@ -134,14 +163,43 @@ function assessInput(){
     }
     displayScore()
 }
+
+//check if answer is wrong and move to the next word
+
+function checkAns(){
+	chance++
+    speech.cancel();
+    if(chance <= 3 && !correct){
+        assessInput();
+        if(correct){
+            correct = false;
+            displayAns();
+            callWord();
+            chance = 0;
+        } else if(chance === 3 && !correct) {
+            displayAns();
+            callWord();
+            chance = 0
+        }
+    }
+}
+
+//Display scoreboard
+
 function displayScore(){
     const scoreboard = document.getElementById('score');
     scoreboard.innerText = `Score: ${score}`;
 }
+
+//Display Answer
+
 function displayAns(){
     const output = document.getElementById('output');
     output.innerText = ans.toUpperCase();
 }
+
+//Reset all used variables
+
 function resets(){
     word = [];
     origin = [];
@@ -158,9 +216,13 @@ function resets(){
     displayScore();
     document.getElementById('start').innerText = 'Start';
     document.getElementById('input').innerText = '';
+			document.getElementById('output').innerText = '';
 			document.getElementById('save').innerText = 'Save';
     document.getElementById('alphabet').innerText = alpha[letterNo - 1];
 }
+
+//Save data to localstorage
+
 function saveData(){
     const json = JSON.stringify({
         asked: asked,
@@ -174,10 +236,12 @@ function saveData(){
     speech.cancel();
     speak('History Saved');
 }
+
+//Gets data from localstorage
+
 function getData(){
     const response = localStorage.getItem(alpha[letterNo - 1]);
 
-    console.log(asked);
     const data = JSON.parse(response);
 
     asked = data.asked;
@@ -188,25 +252,20 @@ function getData(){
     document.getElementById('save').innerText = 'Save';
     speech.cancel();
     speak('History Restore');
-    console.log(asked);
 }
+
+//Clears data in localstorage
+
 function clearData(){
     localStorage.removeItem(alpha[letterNo - 1]);
-    word = [];
-    origin = [];
-    asked = [];
-    correctlyAnswered = [];
-    no = 0;
-    currentTxt = '';
-    correct = false;
-    chance = 0;
-    score = 0;
-    ans = '';
     resets();
     document.getElementById('save').innerText = 'Save';
     speech.cancel();
     speak('History Cleared');
 }
+
+//fetches definition of a word
+
 async function getDefinition(){
     const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${askedWord}`;
 
@@ -214,7 +273,6 @@ async function getDefinition(){
         const response = await fetch(url);
         const data = await response.json();
 
-        console.log(data)
         let text;
         if(!data[0]){
             text = data.title;
@@ -235,6 +293,9 @@ async function getDefinition(){
         alert(error)
     }
 }
+
+//Display the definition and reads it out also using regular exp to remove any occurencebof answer in the definition
+
 async function showDefinition(){
     const defoutput = document.getElementById('defOutput');
     let text = await getDefinition();
@@ -243,6 +304,9 @@ async function showDefinition(){
     text = text.replace(new RegExp(askedWord, 'g'), '*.*');
     defoutput.innerText = text;
 }
+
+//switch the asked word for the new total word and correctly amswered words for the askedword so it would only call words that wherent spelt correctly at first input
+
 function missedWord(){
     word = asked;
     asked = correctlyAnswered;
@@ -250,6 +314,23 @@ function missedWord(){
     speech.cancel()
     speak('Press start to start the missed words')
 }
+
+//Switches the definition card's visibility
+
+function switchDefinitionVisibility(e){
+	if(e.target.innerText === 'Hide'){
+        document.getElementById('def-container').style.visibility = 'hidden';
+        e.target.innerText = 'Show';
+    } else if(e.target.innerText === 'Show'){
+        document.getElementById('def-container').style.visibility = 'visible';
+        e.target.innerText = 'Hide';
+    }
+}
+
+
+//Adding Event Listeners
+
+//Adding start event
 document.getElementById('start').addEventListener('click', () => {
     switch(document.getElementById('start').innerText){
         case 'Start':
@@ -261,42 +342,23 @@ document.getElementById('start').addEventListener('click', () => {
             break;
     }
 });
+
+//Adding Enter Key Pressed event
+
 document.getElementById('input').addEventListener('keyup', (e) => {
     if(e.keyCode === 13){
-        chance++
-        speech.cancel();
-        if(chance <= 3 && !correct){
-            assessInput();
-            if(correct){
-                correct = false;
-                displayAns();
-                callWord();
-                chance = 0;
-           } else if(chance === 3 && !correct) {
-            displayAns();
-            callWord();
-            chance = 0
-        		}
-        }
+        checkAns()
     }
 });
+
+//Adding send event
+
 document.getElementById('send').addEventListener('click', () => {
-    chance++
-    speech.cancel();
-    if(chance <= 3 && !correct){
-        assessInput();
-        if(correct){
-            correct = false;
-            displayAns();
-            callWord();
-            chance = 0;
-        } else if(chance === 3 && !correct) {
-            displayAns();
-            callWord();
-            chance = 0
-        }
-    }
+    checkAns()
 });
+
+//Adding forward event to change the alphabet
+
 document.getElementById('forward').addEventListener('click', () => {
     if(letterNo >= 27){
         letterNo = 1;
@@ -309,6 +371,9 @@ document.getElementById('forward').addEventListener('click', () => {
     resets();
     init()
 });
+
+//Adding backward event to change the alphabet
+
 document.getElementById('backward').addEventListener('click', () => {
     if(letterNo <= 1){
         letterNo = 27;
@@ -320,6 +385,9 @@ document.getElementById('backward').addEventListener('click', () => {
     resets();
     init();
 });
+
+//Event for save
+
 document.getElementById('save').addEventListener('click', (e) => {
     if(localStorage.hasOwnProperty(alpha[letterNo - 1])&&e.target.innerText === 'Continue'){
         document.getElementById('save').innerText = 'Save';
@@ -329,28 +397,37 @@ document.getElementById('save').addEventListener('click', (e) => {
         saveData();
     }
 });
+
+//Event for Reveal
+
 document.getElementById('reveal').addEventListener('click', () => {
     displayAns();
     callWord();
     chance = 0
 });
+
+//Event for Reset
+
 document.getElementById('reset').addEventListener('click', () => {
     clearData();
     init();
 });
+
+//Event for Definition
+
 document.getElementById('def').addEventListener('click', () => {
     showDefinition();
 });
+
+//Toggle Definition visibility
+
 document.getElementById('hide').addEventListener('click', (e) => {
-    if(e.target.innerText === 'Hide'){
-        document.getElementById('def-container').style.visibility = 'hidden';
-        e.target.innerText = 'Show';
-    } else if(e.target.innerText === 'Show'){
-        document.getElementById('def-container').style.visibility = 'visible';
-        e.target.innerText = 'Hide';
-    }
+    switchDefinitionVisibility(e);
 });
-document.getElementById('missed').addEventListener('click', (e) => {
+
+//Event for missed words
+
+document.getElementById('missed').addEventListener('click', () => {
     if(finished){
         missedWord();
     } else {
@@ -358,4 +435,6 @@ document.getElementById('missed').addEventListener('click', (e) => {
         speak('Please finish this letter before practicing the missed word')
     }
 });
+
+//initializing
 init();
