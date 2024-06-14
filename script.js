@@ -12,6 +12,8 @@ let chance = 0;
 let letterNo = 1;
 let correct = false;
 let askedWord = '';
+let rangeConst = 0;
+let rangeBarVar = 0;
 const WORDS = document.getElementById('words').innerText.split(',');
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ALL".split(',');
 const speech = window.speechSynthesis || speechSynthesis;
@@ -37,6 +39,8 @@ function init(){
         if((word.includes(' ') || word.includes(''))&&word.length > 1){
             alert('Error at '+word[word.indexOf('')]+' before '+word[word.indexOf('') - 1]);
         }
+	rangeConst = 100/word.length;
+	updateRangeBar()
         document.getElementById('max-score').innerText = `Max-Score: ${word.length*10}`;
     } catch (error) {
         console.error(error);
@@ -49,7 +53,11 @@ function isEven(no){
     const result = no%2 === 0 ? true : false;
     return result;
 }
+//RangeBar update function
 
+function updateRangeBar(){
+    document.getElementById("range").style.width = `${rangeBarVar}%`;
+}
 //Utility Speak function 
 
 function speak(str){
@@ -119,6 +127,8 @@ function callWord(){
     askedWord = text;
     if(text){
         currentTxt = 'Spell the word... '+text+' ...Origin of '+org;
+	rangeBarVar += rangeConst;
+	updateRangeBar();
     } else {
         finished = true;
         currentTxt = 'You have successfully finished the letter '+alpha[letterNo - 1];
@@ -213,6 +223,7 @@ function resets(){
     chance = 0;
     askedWord = '';
     correct = false;
+    rangeBarVar = 0;
     displayScore();
     document.getElementById('start').innerText = 'Start';
     document.getElementById('input').innerText = '';
@@ -229,6 +240,7 @@ function saveData(){
         correctlyAnswered: correctlyAnswered,
         currentTxt: currentTxt,
         score: score,
+	rangeBarVar: rangeBarVar,
         ans: ans
     });
 
@@ -248,10 +260,12 @@ function getData(){
     correctlyAnswered = data.correctlyAnswered;
     currentTxt = data.currentTxt;
     score = data.score;
+    rangeBarVar = data.rangeBarVar,
     ans = data.ans;
     document.getElementById('save').innerText = 'Save';
     speech.cancel();
     speak('History Restore');
+    updateRangeBar();
 }
 
 //Clears data in localstorage
@@ -311,6 +325,9 @@ function missedWord(){
     word = asked;
     asked = correctlyAnswered;
     document.getElementById('start').innerText = 'Start';
+    rangeBarVar = 0
+    rangeConst = 100/(word.length - asked.length);
+    updateRangeBar()
     speech.cancel()
     speak('Press start to start the missed words')
 }

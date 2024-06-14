@@ -34,6 +34,17 @@ p{
 .container > .content > header > p{
     color: goldenrod;
 }
+.container > .content > header > h1{
+    padding: 10px;
+    display: flex;
+    justify-content: start;
+}
+.container > .content > header > h1 > p{
+    background-color: goldenrod;
+    height: 20px;
+    margin: 0px;
+    border-radius: 5px;
+}
 .container > .content > .main{
     max-width: 70vw;
     min-width: 50vw;
