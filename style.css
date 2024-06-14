@@ -61,6 +61,7 @@ p{
 }
 .container > .content > .main > .ans > p{
     color: goldenrod;
+    max-width: 100%;
 }
 .container > .content > .main > .input{
     display: grid;
