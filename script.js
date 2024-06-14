@@ -64,8 +64,8 @@ function speak(str){
     const utterance = new SpeechSynthesisUtterance();
 
     utterance.text = str
-    utterance.voice = speech.getVoices().filter(voice => voice.lang === "en-GB" && voice.gender === "female" && voice.name.includes("female"))[0];
-    utterance.rate = 0.7;
+    utterance.voice = speech.getVoices().filter(voice => voice.name === "Google UK English Fema" || (voice.name.includes("Female")&&voice.lang === "en-GB") || voice.lang === "en-GB")[0];
+    utterance.rate = 1;
 
     speech.speak(utterance);
 };
@@ -315,7 +315,7 @@ async function showDefinition(){
     let text = await getDefinition();
 
     speak(text);
-    text = text.replace(new RegExp(askedWord, 'g'), '*.*');
+    text = text.replace(new RegExp(askedWord, 'gi'), '*.*');
     defoutput.innerText = text;
 }
 
