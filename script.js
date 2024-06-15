@@ -262,7 +262,11 @@ function getData(){
     score = data.score;
     rangeBarVar = data.rangeBarVar,
     ans = data.ans;
-    document.getElementById('save').innerText = 'Save';
+    
+	if(!data.rangeBarVar){
+		rangeBarVar = rangeConst*asked.length;
+	}
+document.getElementById('save').innerText = 'Save';
     speech.cancel();
     speak('History Restore');
     updateRangeBar();
