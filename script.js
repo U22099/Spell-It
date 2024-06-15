@@ -14,6 +14,9 @@ let correct = false;
 let askedWord = '';
 let rangeConst = 0;
 let rangeBarVar = 0;
+let broken = false;
+let chunk = 0;
+let chunkArray = [[],[]];
 const WORDS = document.getElementById('words').innerText.split(',');
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ALL".split(',');
 const speech = window.speechSynthesis || speechSynthesis;
@@ -39,7 +42,11 @@ function init(){
         if((word.includes(' ') || word.includes(''))&&word.length > 1){
             alert('Error at '+word[word.indexOf('')]+' before '+word[word.indexOf('') - 1]);
         }
-	rangeConst = 100/word.length;
+	if(broken){
+	    word = chunkArray[0][chunk].slice();
+            origin = chunkArray[1][chunk].slice();
+	}
+	rangeConst = word ? 100/word.length : 0;
 	updateRangeBar()
         document.getElementById('max-score').innerText = `Max-Score: ${word.length*10}`;
     } catch (error) {
@@ -127,11 +134,21 @@ function callWord(){
     askedWord = text;
     if(text){
         currentTxt = 'Spell the word... '+text+' ...Origin of '+org;
+	updateWordNo();
 	rangeBarVar += rangeConst;
 	updateRangeBar();
     } else {
-        finished = true;
-        currentTxt = 'You have successfully finished the letter '+alpha[letterNo - 1];
+	if(!broken || chunk >= 5){
+            finished = true;
+            currentTxt = 'You have successfully finished the letter '+alpha[letterNo - 1];
+	} else {
+	    finished = false;
+	    currentTxt = `You have successfully finished chunk ${chunk+1}`;
+	    if(chunk === 4){
+	        finished = true;
+		currentTxt = 'You have successfully finished the letter '+alpha[letterNo - 1];
+	    }
+	}
     }
     speak(currentTxt);
     no = 0;
@@ -161,7 +178,7 @@ function assessInput(){
         correct = true;
         input.style.border = '2px solid goldenrod';
         input.value = '';
-		  if(chance < 2){
+        if(chance < 2){
             correctlyAnswered.push(ans);
         }
     } else {
@@ -222,13 +239,20 @@ function resets(){
     no = 0;
     chance = 0;
     askedWord = '';
+    chunk = 0;
+    broken = false;
+    chunkArray = [[],[]];
+    updateChunkOutput();
     correct = false;
     rangeBarVar = 0;
+    updateRangeBar();
+    updateWordNo();
     displayScore();
+    document.getElementById('break').innerText = 'Break';
     document.getElementById('start').innerText = 'Start';
     document.getElementById('input').innerText = '';
-			document.getElementById('output').innerText = '';
-			document.getElementById('save').innerText = 'Save';
+    document.getElementById('output').innerText = '';
+    document.getElementById('save').innerText = 'Save';
     document.getElementById('alphabet').innerText = alpha[letterNo - 1];
 }
 
@@ -241,6 +265,9 @@ function saveData(){
         currentTxt: currentTxt,
         score: score,
 	rangeBarVar: rangeBarVar,
+	broken: broken,
+	chunk: chunk,
+	chunkArray: chunkArray,
         ans: ans
     });
 
@@ -260,12 +287,19 @@ function getData(){
     correctlyAnswered = data.correctlyAnswered;
     currentTxt = data.currentTxt;
     score = data.score;
-    rangeBarVar = data.rangeBarVar,
+    rangeBarVar = data.rangeBarVar;
+    chunk = data.chunk;
+    broken = data.broken;
+    chunkArray = data.chunkArray;
     ans = data.ans;
-    document.getElementById('save').innerText = 'Save';
     speech.cancel();
     speak('History Restore');
+    broken ? init() : null;
+    document.getElementById('save').innerText = 'Save';
+    document.getElementById('break').innerText = broken ? 'Nxt.Chk' : 'Break';
+    updateWordNo();
     updateRangeBar();
+    updateChunkOutput();
 }
 
 //Clears data in localstorage
@@ -319,15 +353,18 @@ async function showDefinition(){
     defoutput.innerText = text;
 }
 
-//switch the asked word for the new total word and correctly amswered words for the askedword so it would only call words that wherent spelt correctly at first input
+//switch the asked word for the new total word and correctly answered words for the askedword so it would only call words that wherent spelt correctly at first input
 
 function missedWord(){
-    word = asked;
-    asked = correctlyAnswered;
+    broken ? dechunk() : null;
+    asked = correctlyAnswered.slice();
     document.getElementById('start').innerText = 'Start';
     rangeBarVar = 0
     rangeConst = 100/(word.length - asked.length);
-    updateRangeBar()
+    updateRangeBar();
+    chunk = 0;
+    broken = false;
+    updateChunkOutput();
     speech.cancel()
     speak('Press start to start the missed words')
 }
@@ -344,6 +381,52 @@ function switchDefinitionVisibility(e){
     }
 }
 
+//Update Word No
+function updateWordNo(){
+    document.getElementById('wordNo').innerText = asked.length;
+}
+
+//Break Words into 5 chunks
+function _break(){
+    const chunkSize = Math.floor(word.length/5);
+    for(let i = 0; i<5; i++){
+	chunkArray[0].push(word.splice(i, chunkSize));
+	chunkArray[1].push(origin.splice(i, chunkSize));
+    }
+    broken = true;
+    init();
+}
+
+//Dechunk for missed word
+function dechunk(){
+    word = chunkArray[0].flat();
+    origin = chunkArray[1].flat();
+}
+
+//Updating chunk number output
+function updateChunkOutput(){
+   document.getElementById('chunk').innerText = broken ? chunk + 1 : null;
+}
+
+//Works just like reset function but specially for break event listerner
+function _reset(){
+    finished = false;
+    score = 0;
+    currentTxt = '';
+    ans = '';
+    no = 0;
+    chance = 0;
+    askedWord = '';
+    correct = false;
+    rangeBarVar = 0;
+    updateRangeBar();
+    updateWordNo();
+    displayScore();
+    document.getElementById('start').innerText = 'Start';
+    document.getElementById('input').innerText = '';
+    document.getElementById('output').innerText = '';
+    document.getElementById('save').innerText = 'Save';
+}
 
 //Adding Event Listeners
 
@@ -382,9 +465,9 @@ document.getElementById('forward').addEventListener('click', () => {
     } else {
         letterNo += 1;
     }
-
-	 speech.cancel();
-	 speak(alpha[letterNo - 1]);
+    document.getElementById('break').innerText = 'Break';
+    speech.cancel();
+    speak(alpha[letterNo - 1]);
     resets();
     init()
 });
@@ -397,6 +480,7 @@ document.getElementById('backward').addEventListener('click', () => {
     } else {
         letterNo -= 1;
     }
+    document.getElementById('break').innerText = 'Break';
     speech.cancel();
     speak(alpha[letterNo - 1]);
     resets();
@@ -450,6 +534,33 @@ document.getElementById('missed').addEventListener('click', () => {
     } else {
         speech.cancel();
         speak('Please finish this letter before practicing the missed word')
+    }
+});
+document.getElementById('break').addEventListener('click', (e) => {
+    if(e.target.innerText === 'Break'){
+	_break();
+	updateChunkOutput();
+	speech.cancel();
+	speak('Words have been broken into 5 chunks')
+        e.target.innerText = 'Nxt.Chk';
+    } else {
+	chunk += 1;
+	updateChunkOutput();
+        if(chunk < 5){
+	     speech.cancel();
+	     if(chunk === 4){
+		speak(`Starting last chunk`);
+	     } else {
+	         speak(`Starting chunk ${chunk + 1}`);
+	     }
+    	     _reset();
+	     init();
+	} else {
+	    finished = true;
+	    speech.cancel();
+	    speak('You have finished all chunks');
+	    speak('You have successfully finished the letter '+alpha[letterNo - 1]);
+	}
     }
 });
 

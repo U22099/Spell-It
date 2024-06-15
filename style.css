@@ -27,17 +27,23 @@ p{
 .container > .content{
     display: grid;
     grid-template-rows: 1fr;
-    grid-gap: 10px;
     padding: 10px;
     height: 90%;
 }
-.container > .content > header > p{
+.container > .content > header > div{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 10px;
+}
+.container > .content > header > p,
+.container > .content > header > div > p{
     color: goldenrod;
 }
 .container > .content > header > h1{
     padding: 10px;
     display: flex;
     justify-content: start;
+    margin: 0px;
 }
 .container > .content > header > h1 > p{
     background-color: goldenrod;
@@ -53,7 +59,7 @@ p{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 20px;
-    padding: 10px;
+    padding: 0px 10px;
 }
 .container > .content > .main > .alphabets > p:nth-child(2n-1){
     cursor: pointer;
@@ -111,7 +117,7 @@ p{
     border: none;
     cursor: pointer;
 }
-.container > .content > .main > .frbtns > button:last-child{
+.container > .content > .main > .btns > button:last-child{
     grid-column: span 3;
 }
 @media (max-width: 500px){
@@ -121,10 +127,7 @@ p{
     .container > .content > .main > .btns{
 	    grid-template-columns: 1fr 1fr;
     }
-    .container > .content > .main > .frbtns > button:last-child{
+    .container > .content > .main > .btns > button:last-child{
         grid-column: span 1;
-    }
-    .container > .content > .main > .lsbtns > button:last-child{
-	    grid-column: span 2;
     }
 }
