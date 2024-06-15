@@ -72,7 +72,7 @@ function speak(str){
 
     utterance.text = str
     utterance.voice = speech.getVoices().filter(voice => voice.name === "Google UK English Fema" || (voice.name.includes("Female")&&voice.lang === "en-GB") || voice.lang === "en-GB")[0];
-    utterance.rate = 1;
+    utterance.rate = 0.85;
 
     speech.speak(utterance);
 };
@@ -292,6 +292,9 @@ function getData(){
     broken = data.broken;
     chunkArray = data.chunkArray;
     ans = data.ans;
+    if(!data.rangeBarVar){
+		rangeBarVar = rangeConst*asked.length;
+	}
     speech.cancel();
     speak('History Restore');
     broken ? init() : null;
