@@ -17,6 +17,7 @@ let rangeBarVar = 0;
 let broken = false;
 let chunk = 0;
 let chunkArray = [[],[]];
+let read = false;
 const WORDS = document.getElementById('words').innerText.split(',');
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ALL".split(',');
 const speech = window.speechSynthesis || speechSynthesis;
@@ -151,7 +152,7 @@ function callWord(){
 	}
     }
     speak(currentTxt);
-    finished ? successScore() : null;
+    finished&&!read ? successScore() : null;
     no = 0;
 }
 
@@ -161,7 +162,7 @@ function repeat(){
     if(no < 3){
         speech.cancel();
         speak(currentTxt);
-        finished ? successScore() : null
+        finished&&!read ? successScore() : null
         no++
     } else {
         speech.cancel();
@@ -449,6 +450,7 @@ function missedChkWord(){
 
 //Brief give an account of perfomace using percentage
 function successScore(){
+	 read = true;
     broken ? dechunk() : null
     const percent = parseFloat(((correctlyAnswered.length/word.length) * 100).toFixed(2));
     let text = '';
