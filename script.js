@@ -26,7 +26,7 @@ const speech = window.speechSynthesis || speechSynthesis;
 //init Function 
 
 function init(){
-    if(localStorage.hasOwnProperty(alpha[letterNo - 1])&&chunk >= 5){
+    if(localStorage.hasOwnProperty(alpha[letterNo - 1])&&!broken){
         document.getElementById('save').innerText = 'Continue';
     }
     try {
