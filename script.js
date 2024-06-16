@@ -26,7 +26,7 @@ const speech = window.speechSynthesis || speechSynthesis;
 //init Function 
 
 function init(){
-    if(localStorage.hasOwnProperty(alpha[letterNo - 1])){
+    if(localStorage.hasOwnProperty(alpha[letterNo - 1])&&chunk >= 5){
         document.getElementById('save').innerText = 'Continue';
     }
     try {
@@ -574,13 +574,13 @@ document.getElementById('missed').addEventListener('click', () => {
 //Event listerner for breaking words into smaller chunks for easy learning
 
 document.getElementById('break').addEventListener('click', (e) => {
-    if(e.target.innerText === 'Break'){
+    if(e.target.innerText === 'Break' && !finished){
 	_break();
 	updateChunkOutput();
 	speech.cancel();
 	speak('Words have been broken into 5 chunks')
         e.target.innerText = 'Nxt.Chk';
-    } else {
+    } else if(e.target.innerText === 'Nxt.Chk' && !finished){
 	chunk += 1;
 	updateChunkOutput();
         if(chunk < 5){
