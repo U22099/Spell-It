@@ -151,6 +151,7 @@ function callWord(){
 	}
     }
     speak(currentTxt);
+    finished ? successScore() : null;
     no = 0;
 }
 
@@ -160,6 +161,7 @@ function repeat(){
     if(no < 3){
         speech.cancel();
         speak(currentTxt);
+        finished ? successScore() : null
         no++
     } else {
         speech.cancel();
@@ -368,8 +370,9 @@ function missedWord(){
     chunk = 0;
     broken = false;
     updateChunkOutput();
-    speech.cancel()
-    speak('Press start to start the missed words')
+    speech.cancel();
+    speak('Press start to start the missed words');
+    document.getElementById('max-score').innerText = `Max-Score: ${(word.length - asked.length)*10}`;
 }
 
 //Switches the definition card's visibility
@@ -431,6 +434,34 @@ function _reset(){
     document.getElementById('save').innerText = 'Save';
 }
 
+//Missed word fot each chunk word
+function missedChkWord(){
+    asked = correctlyAnswered.filter(x => word.includes(x));
+    document.getElementById('start').innerText = 'Start';
+    rangeBarVar = 0
+    rangeConst = 100/(word.length - asked.length);
+    updateRangeBar();
+    updateWordNo();
+    speech.cancel();
+    speak(`Press start to start the missed words in chunk ${chunk + 1}`);
+    document.getElementById('max-score').innerText = `Max-Score: ${(word.length - asked.length)*10}`;
+}
+
+//Brief give an account of perfomace using percentage
+function successScore(){
+    broken ? dechunk() : null
+    const percent = parseFloat(((correctlyAnswered.length/word.length) * 100).toFixed(2));
+    let text = '';
+    if(percent < 40){
+        text = `Your percentage score is ${percent}%, Please retry this letter, The percentage is too low`;
+    } else if(percent < 60){
+	text = `Your percentage score is ${percent}%, Nice job you performed averagely`;
+    } else {
+	text = `Your percentage score is ${percent}%, Excellent perfomance you got there buddy`;
+    }
+    speech.cancel();
+    speak(text)
+}
 //Adding Event Listeners
 
 //Adding start event
@@ -539,6 +570,9 @@ document.getElementById('missed').addEventListener('click', () => {
         speak('Please finish this letter before practicing the missed word')
     }
 });
+
+//Event listerner for breaking words into smaller chunks for easy learning
+
 document.getElementById('break').addEventListener('click', (e) => {
     if(e.target.innerText === 'Break'){
 	_break();
@@ -563,8 +597,14 @@ document.getElementById('break').addEventListener('click', (e) => {
 	    speech.cancel();
 	    speak('You have finished all chunks');
 	    speak('You have successfully finished the letter '+alpha[letterNo - 1]);
+            successScore();
 	}
     }
+});
+
+//Missed words for each chunk
+document.getElementById('missedChk').addEventListener('click', () => {
+    broken ? missedChkWord() : null;
 });
 
 //initializing

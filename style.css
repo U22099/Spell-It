@@ -29,6 +29,9 @@ p{
     grid-template-rows: 1fr;
     padding: 10px;
     height: 90%;
+    background-color: #1b1b1b;
+    border-radius: 10px;
+    margin: 30px 0px;
 }
 .container > .content > header > div{
     display: grid;
@@ -102,7 +105,7 @@ p{
 }
 .container > .content > .main > .btns{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
     padding: 5px;
     margin: 10px 0px;
@@ -117,10 +120,25 @@ p{
     border: none;
     cursor: pointer;
 }
-.container > .content > .main > .btns > button:last-child{
+.container > .content > .main > .btns > button:last-child,
+.container > .content > .main > .lsbtns > button{
     grid-column: span 3;
 }
+@media (min-width: 800px){
+    .container > .content > .main > .btns{
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .container > .content > .main > .btns > button:last-child{
+        grid-column: span 1;
+    }
+    .container > .content > .main > .lsbtns > #missedChk{
+        grid-column: span 4;
+    }
+}
 @media (max-width: 500px){
+    .container > .content{
+	background-color: transparent;
+    }
     .container > .content > .main{
         max-width: 100vw;
     }
@@ -129,5 +147,8 @@ p{
     }
     .container > .content > .main > .btns > button:last-child{
         grid-column: span 1;
+    }
+    .container > .content > .main > .lsbtns > #missedChk{
+        grid-column: span 2;
     }
 }
