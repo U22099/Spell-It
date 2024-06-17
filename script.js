@@ -17,6 +17,7 @@ let rangeBarVar = 0;
 let broken = false;
 let chunk = 0;
 let chunkArray = [[],[]];
+let chunkScore = 0;
 let read = false;
 const WORDS = document.getElementById('words').innerText.split(',');
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ALL".split(',');
@@ -264,6 +265,7 @@ function saveData(){
     const json = JSON.stringify({
         asked: asked,
         correctlyAnswered: correctlyAnswered,
+	     chunkScore: chunkScore,
         currentTxt: currentTxt,
         score: score,
 	rangeBarVar: rangeBarVar,
@@ -289,6 +291,7 @@ function getData(){
     correctlyAnswered = data.correctlyAnswered;
     currentTxt = data.currentTxt;
     score = data.score;
+	 chunkScore = data.chunkScore;
     rangeBarVar = data.rangeBarVar;
     chunk = data.chunk;
     broken = data.broken;
@@ -417,6 +420,7 @@ function updateChunkOutput(){
 
 //Works just like reset function but specially for break event listerner
 function _reset(){
+    chunkScore += score;
     finished = false;
     score = 0;
     currentTxt = '';
@@ -452,7 +456,8 @@ function missedChkWord(){
 function successScore(){
 	 read = true;
     broken ? dechunk() : null
-    const percent = (parseFloat(((correctlyAnswered.length/word.length)*100).toFixed(2))+parseFloat((((score/10)/word.length)*100).toFixed(2)))/2;
+	 const SCORE = broken ? chunkScore+score : score;
+    const percent = (parseFloat(((correctlyAnswered.length/word.length)*100).toFixed(2))+parseFloat((((SCORE/10)/word.length)*100).toFixed(2)))/2;
     let text = '';
     if(percent < 40){
         text = `Your percentage score is ${percent}%, Please retry this letter, The percentage is too low`;
