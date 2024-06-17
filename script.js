@@ -396,11 +396,12 @@ function updateWordNo(){
 function _break(){
     const chunkSize = Math.floor(word.length/5);
     for(let i = 0; i<5; i++){
-	chunkArray[0].push(word.splice(i, chunkSize));
-	chunkArray[1].push(origin.splice(i, chunkSize));
+	chunkArray[0].push(word.splice(0, chunkSize));
+	chunkArray[1].push(origin.splice(0, chunkSize));
     }
     broken = true;
     init();
+	
 }
 
 //Dechunk for missed word
@@ -451,7 +452,7 @@ function missedChkWord(){
 function successScore(){
 	 read = true;
     broken ? dechunk() : null
-    const percent = (parseFloat(((correctlyAnswered.length/word.length) * 100).toFixed(2))+parseFloat((((score/10)/word.length) * 100).toFixed(2)))/2;
+    const percent = (parseFloat(((correctlyAnswered.length/word.length)*100).toFixed(2))+parseFloat((((score/10)/word.length)*100).toFixed(2)))/2;
     let text = '';
     if(percent < 40){
         text = `Your percentage score is ${percent}%, Please retry this letter, The percentage is too low`;
