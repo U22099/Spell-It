@@ -185,7 +185,6 @@ function assessInput(){
             correctlyAnswered.push(ans);
         }
     } else {
-        score -= 10;
         speak('Wrong');
         correct = false;
         input.style.border = '2px solid red';
@@ -452,7 +451,7 @@ function missedChkWord(){
 function successScore(){
 	 read = true;
     broken ? dechunk() : null
-    const percent = parseFloat(((correctlyAnswered.length/word.length) * 100).toFixed(2));
+    const percent = (parseFloat(((correctlyAnswered.length/word.length) * 100).toFixed(2))+parseFloat((((score/10)/word.length) * 100).toFixed(2)))/2;
     let text = '';
     if(percent < 40){
         text = `Your percentage score is ${percent}%, Please retry this letter, The percentage is too low`;
