@@ -551,8 +551,11 @@ document.getElementById('reveal').addEventListener('click', () => {
 //Event for Reset
 
 document.getElementById('reset').addEventListener('click', () => {
-    clearData();
-    init();
+    const confirmed = confirm("Are you sure you want to clear user data?");
+    confirmed && (()=>{
+		clearData()
+		init()
+	})();
 });
 
 //Event for Definition
