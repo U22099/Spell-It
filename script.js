@@ -71,8 +71,8 @@ function updateRangeBar() {
 }
 //Utility Speak function 
 
-function initVoiceDropdown(){
-    // Get the voices dropdown element
+function initVoiceDropdown() {
+  // Get the voices dropdown element
   const voicesDropdown = document.getElementById('voices');
 
   // Get the list of available voices
@@ -84,13 +84,13 @@ function initVoiceDropdown(){
   // Populate the voices dropdown
   voices.forEach((voice, i) => {
     const option = document.createElement('option');
-    if(voice.name === defaultVoice.name){
-      //Select default voice
-      voicesDropdown.selectedIndex = i;
-    }
     option.value = voice.name;
     option.textContent = voice.name;
     voicesDropdown.appendChild(option);
+    if (voice.name === defaultVoice.name) {
+      //Select default voice
+      voicesDropdown.selectedIndex = i;
+    }
   });
 }
 
@@ -98,7 +98,7 @@ function speak(str) {
   const utterance = new SpeechSynthesisUtterance();
   const voiceName = document.getElementById('voices').value;
   utterance.text = str;
-  utterance.voice = speech.getVoices().find(name => name ===  voiceName);
+  utterance.voice = speech.getVoices().find(name => name === voiceName);
   utterance.rate = 0.85;
 
   speech.speak(utterance);

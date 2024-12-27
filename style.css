@@ -195,6 +195,8 @@ p {
   padding: 2px;
   border: none;
   outline: none;
+  font-size: 1.5rem;
+  color: white;
 }
 
 @media (min-width: 800px) {
@@ -255,6 +257,9 @@ p {
   }
 
   #defOutput {
+    color: black;
+  }
+  .container > .content > .main > .voice > .voice-dropdown{
     color: black;
   }
 }
