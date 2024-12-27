@@ -23,7 +23,7 @@ let chunkScore = 0;
 let read = false;
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ALL".split(',');
 const speech = window.speechSynthesis || speechSynthesis;
-const voices = speech.getVoices();
+const voices = speech.getVoices().filter(voice => voice.lang.includes("en"));
 
 //Defining needed functions
 
@@ -41,7 +41,8 @@ function init() {
         origin.push(wordAll[i]);
       }
     }
-    console.log(origin);
+    //console.log(origin);
+    //For catching error in data structure
     if ((word.includes(' ') || word.includes('')) && word.length > 1) {
       alert('Error at ' + word[word.indexOf('')] + ' before ' + word[word.indexOf('') - 1]);
     }
@@ -75,8 +76,8 @@ function initVoiceDropdown() {
   // Get the voices dropdown element
   const voicesDropdown = document.getElementById('voices');
 
-  //Get default voice 
-  const defaultVoice = voices.filter(voice => voice.name === "Google UK English Female" || ((voice.name.includes("Female") || voice.gender === "female") && voice.lang === "en-GB") || voice.lang === "en-GB")[0];
+  //Get default voice name
+  const defaultVoiceName = localStorage.getItem("voice") || (voices.filter(voice => voice.name === "Google UK English Female" || ((voice.name.includes("Female") || voice.gender === "female") && voice.lang === "en-GB") || voice.lang === "en-GB")[0]).name;
 
   // Populate the voices dropdown
   voices.forEach((voice, i) => {
@@ -84,11 +85,17 @@ function initVoiceDropdown() {
     option.value = voice.name;
     option.textContent = voice.name;
     voicesDropdown.appendChild(option);
-    if (voice.name === defaultVoice.name) {
+    if (voice.name === defaultVoiceName) {
       //Select default voice
       voicesDropdown.selectedIndex = i;
     }
   });
+  
+  voicesDropdown.addEventListener("change", event => {
+    localStorage.setItem("voice", event.target.value);
+    speech.cancel();
+    speak(event.target.value);
+  })
 }
 
 function speak(str) {
