@@ -94,9 +94,9 @@ function initVoiceDropdown() {
 function speak(str) {
   const utterance = new SpeechSynthesisUtterance();
   const voiceName = document.getElementById('voices').value;
-  console.log(voiceName);
+  console.log(voices.find(name => name == voiceName));
   utterance.text = str;
-  utterance.voice = voices.find(name => name === voiceName);
+  utterance.voice = voices.find(name => name == voiceName);
   utterance.rate = 0.85;
 
   speech.speak(utterance);
