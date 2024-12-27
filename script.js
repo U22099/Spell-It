@@ -1,3 +1,4 @@
+import WORDS from "./words/words.js";
 //Declaring variables
 let word = [];
 let origin = [];
@@ -9,7 +10,7 @@ let currentTxt = '';
 let ans = '';
 let no = 0;
 let chance = 0;
-let letterNo = 1;
+let letterNo = parseInt(localStorage.getItem("lastLetterNo")) || 1;
 let correct = false;
 let askedWord = '';
 let rangeConst = 0;
@@ -19,7 +20,7 @@ let chunk = 0;
 let chunkArray = [[], []];
 let chunkScore = 0;
 let read = false;
-const WORDS = document.getElementById('words').innerText.split(',');
+//const WORDS = document.getElementById('words').innerText.split(',');
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ALL".split(',');
 const speech = window.speechSynthesis || speechSynthesis;
 
@@ -41,6 +42,9 @@ function init() {
         origin.push(wordAll[i]);
       }
     }
+    const defoutput = document.getElementById('defOutput');
+    defoutput.innerText = JSON.stringify(wordAll)
+    //console.log(JSON.stringify(wordAll));
     if ((word.includes(' ') || word.includes('')) && word.length > 1) {
       alert('Error at ' + word[word.indexOf('')] + ' before ' + word[word.indexOf('') - 1]);
     }
@@ -51,6 +55,7 @@ function init() {
     rangeConst = word ? 100 / word.length : 0;
     updateRangeBar()
     document.getElementById('max-score').innerText = `Max-Score: ${word.length*10}`;
+    document.getElementById('alphabet').innerText = alpha[letterNo - 1];
   } catch (error) {
     console.error(error);
   }
@@ -314,6 +319,7 @@ function getData() {
 
 function clearData() {
   localStorage.removeItem(alpha[letterNo - 1]);
+  localStorage.removeItem("lastLetterNo");
   resets();
   document.getElementById('save').innerText = 'Save';
   speech.cancel();
@@ -323,7 +329,7 @@ function clearData() {
 //fetches definition of a word
 
 async function getDefinition() {
-  if(!askedWord) return "No current word to define";
+  if (!askedWord) return "No current word to define";
   const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${askedWord}`;
 
   try {
@@ -348,7 +354,7 @@ async function getDefinition() {
     return text
   } catch (error) {
     console.log(error);
-    if(!navigator.onLine) return "Internet connection required." 
+    if (!navigator.onLine) return "Internet connection required."
     else return "An error occurred";
   }
 }
@@ -359,9 +365,9 @@ async function showDefinition() {
   const defoutput = document.getElementById('defOutput');
   defoutput.innerText = "Fetching definition...";
   defoutput.style.animation = "pulse 1s linear infinite";
-  
+
   let text = await getDefinition();
-  
+
   defoutput.style.animation = "none";
   speak(text);
   text = askedWord ? text.replace(new RegExp(askedWord, 'gi'), '*.*') : text;
@@ -514,6 +520,7 @@ document.getElementById('forward').addEventListener('click', () => {
     letterNo += 1;
   }
   document.getElementById('break').innerText = 'Break';
+  localStorage.setItem("lastLetterNo", letterNo);
   speech.cancel();
   speak(alpha[letterNo - 1].toLowerCase());
   resets();
@@ -529,6 +536,7 @@ document.getElementById('backward').addEventListener('click', () => {
     letterNo -= 1;
   }
   document.getElementById('break').innerText = 'Break';
+  localStorage.setItem("lastLetterNo", letterNo);
   speech.cancel();
   speak(alpha[letterNo - 1].toLowerCase());
   resets();
