@@ -654,4 +654,4 @@ document.getElementById('missedChk').addEventListener('click', () => {
 
 //initializing
 init();
-speech.addEventListener("voiceschanged", initVoiceDropdown);
+initVoiceDropdown();
