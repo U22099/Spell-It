@@ -323,6 +323,7 @@ function clearData() {
 //fetches definition of a word
 
 async function getDefinition() {
+  if(!askedWord) return "No current word to define";
   const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${askedWord}`;
 
   try {
@@ -347,26 +348,23 @@ async function getDefinition() {
     return text
   } catch (error) {
     console.log(error);
-    if(!navigator.onLine) return "Internet connection required.";
+    if(!navigator.onLine) return "Internet connection required." 
+    else return "An error occurred";
   }
 }
-
-navigator.connection.addEventListener('change', () => {
-  const bandwidth = navigator.connection.downlink;
-  if (bandwidth < 1) { // 1 Mbps threshold
-    console.error('Error: Slow internet speed');
-  }
-  console.log(bandwidth+"Mbps")
-});
 
 //Display the definition and reads it out also using regular exp to remove any occurence of answer in the definition
 
 async function showDefinition() {
   const defoutput = document.getElementById('defOutput');
+  defoutput.innerText = "Fetching definition...";
+  defoutput.style.animation = "pulse 1s linear infinite";
+  
   let text = await getDefinition();
-
+  
+  defoutput.style.animation = "none";
   speak(text);
-  text = text.replace(new RegExp(askedWord, 'gi'), '*.*');
+  text = askedWord ? text.replace(new RegExp(askedWord, 'gi'), '*.*') : text;
   defoutput.innerText = text;
 }
 
