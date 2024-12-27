@@ -73,7 +73,7 @@ function speak(str) {
   const utterance = new SpeechSynthesisUtterance();
 
   utterance.text = str
-  utterance.voice = speech.getVoices().filter(voice => voice.name === "Google UK English Fema" || (voice.name.includes("Female") && voice.lang === "en-GB") || voice.lang === "en-GB")[0];
+  utterance.voice = speech.getVoices().filter(voice => voice.name === "Google UK English Female" || ((voice.name.includes("Female") || voice.gender === "female") && voice.lang === "en-GB") || voice.lang === "en-GB")[0];
   utterance.rate = 0.85;
 
   speech.speak(utterance);
@@ -105,7 +105,7 @@ function available() {
   return arrayObj
 }
 
-//Generates a random word to ve called
+//Generates a random word to be called
 
 function generateNewWord() {
   const { word, origin } = available();
@@ -333,24 +333,33 @@ async function getDefinition() {
     if (!data[0]) {
       text = data.title;
     } else {
-      let def2 = 'Null'
+      let def2 = null;
       if (data[0].meanings[1]) {
         def2 = data[0].meanings[1].definitions[0].definition;
       } else if (data[0].meanings[0].definitions[1]) {
         def2 = data[0].meanings[0].definitions[1].definition;
       }
-      const definition = `${data[0].meanings[0].definitions[0].definition} or ${def2}`;
-      const origin = data[0].origin;
-      const example = data[0].meanings[0].definitions[0].example;
+      const definition = `${data[0].meanings[0].definitions[0].definition} ${def2 ? "or "+def2 : ""}`;
+      const origin = data[0].origin || "";
+      const example = data[0].meanings[0].definitions[0].example || "";
       text = `${definition}...\nOrigin: ${origin}...\nExample: ${example}`;
     }
     return text
   } catch (error) {
-    alert(error)
+    console.log(error);
+    if(!navigator.onLine) return "Internet connection required.";
   }
 }
 
-//Display the definition and reads it out also using regular exp to remove any occurencebof answer in the definition
+navigator.connection.addEventListener('change', () => {
+  const bandwidth = navigator.connection.downlink;
+  if (bandwidth < 1) { // 1 Mbps threshold
+    console.error('Error: Slow internet speed');
+  }
+  console.log(bandwidth+"Mbps")
+});
+
+//Display the definition and reads it out also using regular exp to remove any occurence of answer in the definition
 
 async function showDefinition() {
   const defoutput = document.getElementById('defOutput');
@@ -460,11 +469,11 @@ function successScore() {
   const percent = (parseFloat(((correctlyAnswered.length / word.length) * 100).toFixed(2)) + parseFloat((((SCORE / 10) / word.length) * 100).toFixed(2))) / 2;
   let text = '';
   if (percent < 40) {
-    text = `Your percentage score is ${percent}%, Please retry this letter, The percentage is too low`;
+    text = `Your percentage score is ${percent}%, Please retry this letter`;
   } else if (percent < 60) {
-    text = `Your percentage score is ${percent}%, Nice job you performed averagely`;
+    text = `Your percentage score is ${percent}%`;
   } else {
-    text = `Your percentage score is ${percent}%, Excellent perfomance you got there buddy`;
+    text = `Your percentage score is ${percent}%`;
   }
   speech.cancel();
   speak(text)
@@ -508,7 +517,7 @@ document.getElementById('forward').addEventListener('click', () => {
   }
   document.getElementById('break').innerText = 'Break';
   speech.cancel();
-  speak(alpha[letterNo - 1]);
+  speak(alpha[letterNo - 1].toLowerCase());
   resets();
   init()
 });
@@ -523,7 +532,7 @@ document.getElementById('backward').addEventListener('click', () => {
   }
   document.getElementById('break').innerText = 'Break';
   speech.cancel();
-  speak(alpha[letterNo - 1]);
+  speak(alpha[letterNo - 1].toLowerCase());
   resets();
   init();
 });
@@ -545,7 +554,7 @@ document.getElementById('save').addEventListener('click', (e) => {
 document.getElementById('reveal').addEventListener('click', () => {
   displayAns();
   callWord();
-  chance = 0
+  chance = 0;
 });
 
 //Event for Reset

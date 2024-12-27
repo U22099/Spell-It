@@ -16,7 +16,7 @@ p{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #131313;
+    background-color: #272727;
     border-radius: 5px;
     font-size: 2em;
     padding: 10px 20px;
@@ -27,14 +27,14 @@ p{
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: hsl(0, 100%, 0%);
+    background: black; /*hsl(0, 100%, 0%);*/
 }
 .container > .content{
     display: grid;
     grid-template-rows: 1fr;
     padding: 10px;
     height: 90%;
-    background-color: #1b1b1b;
+    background-color: black; /*#1b1b1b;*/
     border-radius: 10px;
     margin: 30px 0px;
 }
@@ -84,7 +84,7 @@ p{
 }
 .container > .content > .main > .input > #input{
     padding: 10px;
-    background: #131313;
+    background: #272727;
     color: white;
     font-size: 1.2em;
     font-weight: 500;
@@ -156,4 +156,23 @@ p{
     .container > .content > .main > .lsbtns > #missedChk{
         grid-column: span 2;
     }
+}
+
+@media (prefers-color-scheme: light){
+  .container{
+    background: white;
+  }
+  .custom-bg{
+    background: #f5f5f5;
+  }
+  #alphabet{
+    color: black;
+  }
+  .container > .content > .main > .input > #input{
+    background: #f5f5f5;
+    color: black;
+  }
+  #defOutput{
+    color: black;
+  }
 }
