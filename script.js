@@ -93,12 +93,12 @@ function initVoiceDropdown() {
   
   voicesDropdown.addEventListener("change", event => {
     localStorage.setItem("voice", event.target.value);
-    speech.cancel();
     speak(event.target.value);
   })
 }
 
 function speak(str) {
+  if(speech.pending || speech.speaking) speech.cancel();
   const utterance = new SpeechSynthesisUtterance();
   const voiceName = document.getElementById('voices').value;
   utterance.text = str;
@@ -190,12 +190,12 @@ function callWord() {
 
 function repeat() {
   if (no < 3) {
-    speech.cancel();
+    
     speak(currentTxt);
     finished && !read ? successScore() : null
     no++
   } else {
-    speech.cancel();
+    
     speak('Max Repeat Reached');
   }
 }
@@ -227,7 +227,7 @@ function assessInput() {
 
 function checkAns() {
   chance++
-  speech.cancel();
+  
   if (chance <= 3 && !correct) {
     assessInput();
     if (correct) {
@@ -305,7 +305,7 @@ function saveData() {
   });
 
   localStorage.setItem(alpha[letterNo - 1], json);
-  speech.cancel();
+  
   speak('History Saved');
 }
 
@@ -329,7 +329,7 @@ function getData() {
   if (!data.rangeBarVar) {
     rangeBarVar = rangeConst * asked.length;
   }
-  speech.cancel();
+  
   speak('History Restore');
   broken ? init() : null;
   document.getElementById('save').innerText = 'Save';
@@ -346,7 +346,7 @@ function clearData() {
   localStorage.removeItem("lastLetterNo");
   resets();
   document.getElementById('save').innerText = 'Save';
-  speech.cancel();
+  
   speak('History Cleared');
 }
 
@@ -410,7 +410,7 @@ function missedWord() {
   chunk = 0;
   broken = false;
   updateChunkOutput();
-  speech.cancel();
+  
   speak('Press start to start the missed words');
   document.getElementById('max-score').innerText = `Max-Score: ${(word.length - asked.length)*10}`;
 }
@@ -484,7 +484,7 @@ function missedChkWord() {
   rangeConst = 100 / (word.length - asked.length);
   updateRangeBar();
   updateWordNo();
-  speech.cancel();
+  
   speak(`Press start to start the missed words in chunk ${chunk + 1}`);
   document.getElementById('max-score').innerText = `Max-Score: ${(word.length - asked.length)*10}`;
 }
@@ -503,7 +503,7 @@ function successScore() {
   } else {
     text = `Your percentage score is ${percent}%`;
   }
-  speech.cancel();
+  
   speak(text)
 }
 //Adding Event Listeners
@@ -545,7 +545,7 @@ document.getElementById('forward').addEventListener('click', () => {
   }
   document.getElementById('break').innerText = 'Break';
   localStorage.setItem("lastLetterNo", letterNo);
-  speech.cancel();
+  
   speak(alpha[letterNo - 1].toLowerCase());
   resets();
   init()
@@ -561,7 +561,7 @@ document.getElementById('backward').addEventListener('click', () => {
   }
   document.getElementById('break').innerText = 'Break';
   localStorage.setItem("lastLetterNo", letterNo);
-  speech.cancel();
+  
   speak(alpha[letterNo - 1].toLowerCase());
   resets();
   init();
@@ -615,7 +615,7 @@ document.getElementById('missed').addEventListener('click', () => {
   if (finished) {
     missedWord();
   } else {
-    speech.cancel();
+    
     speak('Please finish this letter before practicing the missed word')
   }
 });
@@ -626,14 +626,14 @@ document.getElementById('break').addEventListener('click', (e) => {
   if (e.target.innerText === 'Break' && !finished) {
     _break();
     updateChunkOutput();
-    speech.cancel();
+    
     speak('Words have been broken into 5 chunks')
     e.target.innerText = 'Nxt.Chk';
   } else if (e.target.innerText === 'Nxt.Chk' && !finished) {
     chunk += 1;
     updateChunkOutput();
     if (chunk < 5) {
-      speech.cancel();
+      
       if (chunk === 4) {
         speak(`Starting last chunk`);
       } else {
@@ -643,7 +643,7 @@ document.getElementById('break').addEventListener('click', (e) => {
       init();
     } else {
       finished = true;
-      speech.cancel();
+      
       speak('You have finished all chunks');
       speak('You have successfully finished the letter ' + alpha[letterNo - 1]);
       successScore();
