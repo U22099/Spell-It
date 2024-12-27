@@ -23,6 +23,7 @@ let chunkScore = 0;
 let read = false;
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ALL".split(',');
 const speech = window.speechSynthesis || speechSynthesis;
+const voices = speech.getVoices();
 
 //Defining needed functions
 
@@ -40,7 +41,7 @@ function init() {
         origin.push(wordAll[i]);
       }
     }
-    console.log(wordAll);
+    console.log(origin);
     if ((word.includes(' ') || word.includes('')) && word.length > 1) {
       alert('Error at ' + word[word.indexOf('')] + ' before ' + word[word.indexOf('') - 1]);
     }
@@ -74,9 +75,6 @@ function initVoiceDropdown() {
   // Get the voices dropdown element
   const voicesDropdown = document.getElementById('voices');
 
-  // Get the list of available voices
-  const voices = speech.getVoices();
-
   //Get default voice 
   const defaultVoice = voices.filter(voice => voice.name === "Google UK English Female" || ((voice.name.includes("Female") || voice.gender === "female") && voice.lang === "en-GB") || voice.lang === "en-GB")[0];
 
@@ -96,9 +94,9 @@ function initVoiceDropdown() {
 function speak(str) {
   const utterance = new SpeechSynthesisUtterance();
   const voiceName = document.getElementById('voices').value;
-  
+  console.log(voiceName);
   utterance.text = str;
-  utterance.voice = speech.getVoices().find(name => name === voiceName);
+  utterance.voice = voices.find(name => name === voiceName);
   utterance.rate = 0.85;
 
   speech.speak(utterance);
