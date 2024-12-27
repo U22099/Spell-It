@@ -34,8 +34,7 @@ function init() {
     document.getElementById('save').innerText = 'Continue';
   }
   try {
-    const data = WORDS[letterNo - 1];
-    const wordAll = data.split(' ');
+    const wordAll = WORDS[letterNo - 1];
     for (let i = 0; i < wordAll.length; i++) {
       if (i === 0 || isEven(i)) {
         word.push(wordAll[i]);
@@ -43,9 +42,6 @@ function init() {
         origin.push(wordAll[i]);
       }
     }
-    const defoutput = document.getElementById('defOutput');
-    defoutput.innerText = JSON.stringify(wordAll)
-    //console.log(JSON.stringify(wordAll));
     if ((word.includes(' ') || word.includes('')) && word.length > 1) {
       alert('Error at ' + word[word.indexOf('')] + ' before ' + word[word.indexOf('') - 1]);
     }
@@ -54,7 +50,7 @@ function init() {
       origin = chunkArray[1][chunk].slice();
     }
     rangeConst = word ? 100 / word.length : 0;
-    updateRangeBar()
+    updateRangeBar();
     document.getElementById('max-score').innerText = `Max-Score: ${word.length*10}`;
     document.getElementById('alphabet').innerText = alpha[letterNo - 1];
   } catch (error) {

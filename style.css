@@ -132,12 +132,9 @@ p{
 .container > .content > .main > #def-container > p {
   word-wrap: wrap;
   word-break: break-all;
-  font-size: 10px;
   display: flex;
   justify-content: start;
   align-items: start;
-  text-wrap: wrap;
-  overflow: scroll;
 }
 @media (min-width: 800px){
     .container > .content > .main > .btns{
