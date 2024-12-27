@@ -73,9 +73,35 @@ function updateRangeBar() {
 
 function speak(str) {
   const utterance = new SpeechSynthesisUtterance();
+  
+  utterance.text = str;
+  
+  // Get the voices dropdown element
+  const voicesDropdown = document.getElementById('voices');
 
-  utterance.text = str
-  utterance.voice = speech.getVoices().filter(voice => voice.name === "Google UK English Female" || ((voice.name.includes("Female") || voice.gender === "female") && voice.lang === "en-GB") || voice.lang === "en-GB")[0];
+  // Get the list of available voices
+  const voices = speech.getVoices();
+  
+  //Get default voice 
+  const defaultVoice = voices.filter(voice => voice.name === "Google UK English Female" || ((voice.name.includes("Female") || voice.gender === "female") && voice.lang === "en-GB") || voice.lang === "en-GB")[0];
+
+  // Populate the voices dropdown
+  voices.forEach((voice) => {
+    const option = document.createElement('option');
+    option.value = voice.name;
+    option.textContent = voice.name;
+    voicesDropdown.appendChild(option);
+  });
+
+  //Select default voice
+  voicesDropdown.selectedIndex =  voices.indexOf(defaultVoice);
+  
+  // Add event listener to update the voice variable
+  voicesDropdown.addEventListener('change', (event) => {
+    utterance.voice = speechSynthesis.getVoices().find((v) => v.name === event.target.value);
+  });
+  
+  utterance.voice = defaultVoice;
   utterance.rate = 0.85;
 
   speech.speak(utterance);

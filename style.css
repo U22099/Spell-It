@@ -14,6 +14,10 @@
   background: transparent;
   cursor: pointer;
 }
+* {
+  font-family: monospace;
+  font-weight: 600;
+}
 body {
   margin: 0px;
   font-family: monospace;
@@ -120,7 +124,7 @@ p {
   background: #272727;
   color: white;
   font-size: 1.2em;
-  font-weight: 500;
+  font-weight: 600;
   border: none;
   outline: none;
   border-radius: 5px;
@@ -138,7 +142,7 @@ p {
   background: goldenrod;
   color: black;
   font-size: 1.5em;
-  font-weight: 500;
+  font-weight: 700;
   border-radius: 5px;
   outline: none;
   border: none;
@@ -157,7 +161,7 @@ p {
   background: goldenrod;
   color: black;
   font-size: .7em;
-  font-weight: 500;
+  font-weight: 700;
   border-radius: 5px;
   outline: none;
   border: none;
@@ -175,6 +179,22 @@ p {
   display: flex;
   justify-content: start;
   align-items: start;
+  font-size: 1.8rem;
+}
+.container > .content > .main > .voice {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 8px;
+}
+.container > .content > .main > .voice > label{
+  font-size: 1.5em;
+}
+.container > .content > .main > .voice > .voice-dropdown{
+  margin-top: 8px;
+  padding: 2px;
+  border: none;
+  outline: none;
 }
 
 @media (min-width: 800px) {
