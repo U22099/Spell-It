@@ -25,7 +25,7 @@ import X from "./X.json";
 import Y from "./Y.json";
 import Z from "./Z.json";
 
-export default WORDS = [
+export const WORDS = [
   A.data,
   B.data,
   C.data,

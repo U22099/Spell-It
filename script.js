@@ -1,4 +1,5 @@
-import WORDS from "./words/words.js";
+import { WORDS } from "./words/words.js";
+
 //Declaring variables
 let word = [];
 let origin = [];
