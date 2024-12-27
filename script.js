@@ -21,14 +21,12 @@ let chunk = 0;
 let chunkArray = [[], []];
 let chunkScore = 0;
 let read = false;
-//const WORDS = document.getElementById('words').innerText.split(',');
 const alpha = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ALL".split(',');
 const speech = window.speechSynthesis || speechSynthesis;
 
 //Defining needed functions
 
-//init Function 
-
+//init Function
 function init() {
   if (localStorage.hasOwnProperty(alpha[letterNo - 1]) && !broken) {
     document.getElementById('save').innerText = 'Continue';
@@ -42,6 +40,7 @@ function init() {
         origin.push(wordAll[i]);
       }
     }
+    console.log(wordAll);
     if ((word.includes(' ') || word.includes('')) && word.length > 1) {
       alert('Error at ' + word[word.indexOf('')] + ' before ' + word[word.indexOf('') - 1]);
     }
@@ -97,6 +96,7 @@ function initVoiceDropdown() {
 function speak(str) {
   const utterance = new SpeechSynthesisUtterance();
   const voiceName = document.getElementById('voices').value;
+  
   utterance.text = str;
   utterance.voice = speech.getVoices().find(name => name === voiceName);
   utterance.rate = 0.85;
@@ -654,4 +654,4 @@ document.getElementById('missedChk').addEventListener('click', () => {
 
 //initializing
 init();
-initVoiceDropdown();
+speech.addEventListener("voiceschanged", initVoiceDropdown);
