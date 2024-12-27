@@ -2,16 +2,16 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/SpellingBee/',
+  base: '/Spell-It/',
   plugins: [VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Spell It: SpellingBee',
+        name: 'Spell It: Spelling Bee',
         short_name: 'Spell It',
         description: 'A spelling quiz app for higher grade',
         background_color: '#000',
         display: 'standalone',
-        start_url: '/SpellingBee',
+        start_url: '/Spell-It',
         scope: '/',
         orientation: 'portrait',
         theme_color: '#000',
